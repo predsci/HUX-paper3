@@ -1,10 +1,8 @@
 # ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  HUX Paper 3
-Evaluating the HUX technique with PSP and STEREO spacecraft observations. 
-
+Evaluating the HUX technique with PSP and OMNI(Earth) spacecraft observations. 
 
 # References
 [1] [Riley, P. and Lionello, Roberto. Mapping solar wind streams from the Sun to 1 AU: A comparison of techniques. Solar Physics, 270(2), 575–592, 2011.](https://www.researchgate.net/publication/226565167_Mapping_Solar_Wind_Streams_from_the_Sun_to_1_AU_A_Comparison_of_Techniques)
-
 
 # Dependencies
 1. [Python >= 3.7](https://www.python.org/downloads/)
@@ -16,7 +14,7 @@ Evaluating the HUX technique with PSP and STEREO spacecraft observations.
 
 # Data 
 All data from in-situ spacecraft observations and MHD model results 
-can be downloaded using [psipy](https://psipy.readthedocs.io/en/stable/auto_examples/sampling/plot_in_situ_comparison.html#sphx-glr-auto-examples-sampling-plot-in-situ-comparison-py). 
+can be downloaded using [PsiPy](https://psipy.readthedocs.io/en/stable/auto_examples/sampling/plot_in_situ_comparison.html#sphx-glr-auto-examples-sampling-plot-in-situ-comparison-py) and [HelioPy](https://docs.heliopy.org/en/stable/index.html). 
 
 # Authors
 [Predictive Science Inc.](https://www.predsci.com/portal/home.php)
