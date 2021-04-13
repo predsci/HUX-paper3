@@ -14,9 +14,9 @@ Evaluating the HUX technique with PSP and STEREO spacecraft observations.
 5. [pyhdf >= 0.10.2](https://pypi.org/project/pyhdf/)
 6. [psipy >= 0.1.1](https://psipy.readthedocs.io/en/stable/guide/installing.html)
 
-# Data (all files can be found in "data" folder)
-* [MHD CR2210](http://www.predsci.com/data/runs/cr2210-medium/hmi_mast_mas_std_0201/helio/)
-
+# Data 
+All data from in-situ spacecraft observations and MHD model results 
+can be downloaded using [psipy](https://psipy.readthedocs.io/en/stable/auto_examples/sampling/plot_in_situ_comparison.html#sphx-glr-auto-examples-sampling-plot-in-situ-comparison-py). 
 
 # Authors
 [Predictive Science Inc.](https://www.predsci.com/portal/home.php)

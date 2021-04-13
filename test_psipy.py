@@ -1,16 +1,34 @@
 import matplotlib.pyplot as plt
 
 from heliopy.data import psp
+from heliopy.data import omni
+from heliopy.data import stereo
+from heliopy.data import wind
+from heliopy.data import stereo
+from heliopy.data import ace
 import heliopy.data.spice as spicedata
 import heliopy.spice as spice
-
+from scipy.interpolate import interpn
+from astropy.coordinates import SkyCoord
+from astropy.coordinates import SkyOffsetFrame
+from cdasws import CdasWs
 from psipy.model import MASOutput
+import astropy.coordinates as astrocoords
 from psipy.model.variable import Variable
 from psipy.data import sample_data
 from pathlib import Path
 from parfive import Downloader
+import datetime as dt
 
 
+# ======================================================================================================================
+# LOAD OMNI DATASET.
+# ======================================================================================================================
+
+starttime = dt.datetime(year=2018, month=10, day=26)
+endtime = dt.datetime(year=2018, month=11, day=23)
+
+omni_data = omni.h0_mrg1hr(starttime, endtime)
 # ======================================================================================================================
 # LOAD MAS RESULTS CR2210
 # ======================================================================================================================
@@ -52,6 +70,8 @@ print(vr_model)
 starttime = '2018-10-26'
 endtime = '2018-11-23'
 psp_data = psp.merged_mag_plasma(starttime, endtime)
+
+
 print(psp_data.columns)
 
 times = psp_data.index
