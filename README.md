@@ -11,6 +11,7 @@ Evaluating the HUX technique with PSP and OMNI(Earth) spacecraft observations.
 4. [scipy >= 1.5.0](https://www.scipy.org/install.html)
 5. [pyhdf >= 0.10.2](https://pypi.org/project/pyhdf/)
 6. [psipy >= 0.1.1](https://psipy.readthedocs.io/en/stable/guide/installing.html)
+7. [heliopy >= 0.15.3](https://docs.heliopy.org/en/stable/index.html)
 
 # Data 
 All data from in-situ spacecraft observations and MHD model results 
