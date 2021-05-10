@@ -8,6 +8,7 @@ from heliopy.data import stereo
 from heliopy.data import ace
 import heliopy.data.spice as spicedata
 import heliopy.spice as spice
+import heliopy.models
 from scipy.interpolate import interpn
 from astropy.coordinates import SkyCoord
 from astropy.coordinates import SkyOffsetFrame

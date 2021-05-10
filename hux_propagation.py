@@ -1,5 +1,6 @@
 """HUX-f and HUX-b propagation implemented. """
 import numpy as np
+import scipy
 
 
 def apply_hux_f_model(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
@@ -72,7 +73,7 @@ def apply_hux_b_model(r_final, dr_vec, dp_vec, alpha=0.15, rh=50 * 695700, add_v
             else:
                 frac2 = (omega_rot * dr_vec[i]) / dp_vec[0]
 
-            frac1 = (v[-(i + 1), j-1] - v[-(i + 1), j]) / v[-(i + 1), j]
+            frac1 = (v[-(i + 1), j - 1] - v[-(i + 1), j]) / v[-(i + 1), j]
             v[-(i + 2), j] = v[-(i + 1), j] + frac1 * frac2
 
     # add acceleration after upwind.
@@ -171,3 +172,23 @@ def apply_backwards_upwind_model(r_final, dr_vec, dp_vec, alpha=0.15, rh=50 * 69
         v_next = -v_acc + v_next
 
     return v_next
+
+
+def apply_ballistic_approximation(v_initial, dr, phi_vec, omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """ Apply the ballistic model for mapping solar wind streams to
+    different locations in the heliosphere is the simplest possible approximation
+
+    :param phi_vec: mesh carrington longitude spacing (radians).
+    :param v_initial: 1d array, initial velocity for ballistic. units = (km/sec).
+    :param dr: delta r. units = (km).
+    :param omega_rot: differential rotation. (1/secs)
+    :return: shifted phi coordinates. """
+
+    # delta_phi = -omega * delta_r / (vr0)
+    delta_phi = (omega_rot * dr)/v_initial
+    phi_shifted = phi_vec - delta_phi
+    # force periodicity
+    return phi_shifted % (2*np.pi)
+
+
+
