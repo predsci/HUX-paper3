@@ -1,5 +1,6 @@
 # ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  HUX Paper 3
-Evaluating the HUX technique with PSP and OMNI(Earth) spacecraft observations. 
+Evaluating the Heliospheric Upwind eXtrapolation (HUX) Technique developed by Riley et al. [1] with Parker Solar Probe 
+(PSP) and OMNI (Earth) spacecraft observations. 
 
 # References
 [1] [Riley, P. and Lionello, Roberto. Mapping solar wind streams from the Sun to 1 AU: A comparison of techniques. Solar Physics, 270(2), 575–592, 2011.](https://www.researchgate.net/publication/226565167_Mapping_Solar_Wind_Streams_from_the_Sun_to_1_AU_A_Comparison_of_Techniques)
