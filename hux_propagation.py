@@ -1,6 +1,7 @@
 """HUX-f and HUX-b propagation implemented. """
 import numpy as np
 import scipy
+import copy
 
 
 def apply_hux_f_model(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
@@ -185,10 +186,133 @@ def apply_ballistic_approximation(v_initial, dr, phi_vec, omega_rot=(2 * np.pi) 
     :return: shifted phi coordinates. """
 
     # delta_phi = -omega * delta_r / (vr0)
-    delta_phi = (omega_rot * dr)/v_initial
+    delta_phi = (omega_rot * dr) / v_initial
     phi_shifted = phi_vec - delta_phi
     # force periodicity
-    return phi_shifted % (2*np.pi)
+    return phi_shifted % (2 * np.pi)
 
 
+def apply_second_order_f_upwind(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
+                                omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """Apply 1d upwind model to the inviscid burgers equation.
+    r/phi grid. return and save all radial velocity slices.
 
+    :param r_initial: 1d array, initial condition (vr0). units = (km/sec).
+    :param dr_vec: 1d array, mesh spacing in r. units = (km)
+    :param dp_vec: 1d array, mesh spacing in p. units = (radians)
+    :param alpha: float, hyper parameter for acceleration (default = 0.15).
+    :param rh: float, hyper parameter for acceleration (default r=50*695700). units: (km)
+    :param r0: float, initial radial location. units = (km).
+    :param add_v_acc: bool, True will add acceleration boost.
+    :param omega_rot: differential rotation.
+    :return: velocity matrix dimensions (nr x np)
+    """
+    v = np.zeros((len(dr_vec) + 1, len(dp_vec) + 1))  # initialize array vr.
+    v[0, :] = r_initial
+
+    if add_v_acc:
+        v_acc = alpha * (v[0, :] * (1 - np.exp(-r0 / rh)))
+        v[0, :] = v_acc + v[0, :]
+
+    for i in range(len(dr_vec)):
+        for j in range(len(dp_vec) + 1):
+
+            if j == len(dp_vec):  # force periodicity
+                v[i + 1, j] = v[i + 1, 0]
+
+            else:
+                if (omega_rot * dr_vec[i]) / (dp_vec[j] * v[i, j]) > 1:
+                    print(dr_vec[i] - dp_vec[j] * v[i, j] / omega_rot)
+                    print(i, j)  # courant condition
+
+                if j == len(dp_vec) - 1:
+                    frac1 = (4 * v[i, j + 1] - 3 * v[i, j] - v[i, -1]) / (v[i, j])
+                else:
+                    frac1 = (4 * v[i, j + 1] - 3 * v[i, j] - v[i, j + 2]) / (v[i, j])
+                frac2 = (omega_rot * dr_vec[i]) / (2 * dp_vec[j])
+                v[i + 1, j] = v[i, j] + frac1 * frac2
+
+    return v
+
+
+def forward_radial_boosting(r_vec, v_vec, p_vec, nr=30, omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """Radial boost if the initial condition r0 is non uniform.
+    Requirements: r_vec is single-valued function of longitude.
+
+    :param omega_rot: differential rotation.
+    :param nr: radial grid number of points.
+    :param r_vec: spacecraft radial trajectory, type = 1d numpy array. units: km.
+    :param v_vec: velocity (vr), type = 1d numpy array. units: km/sec.
+    :param p_vec: spacecraft longitude trajectory, type = 1d numpy array. units: radians.
+    :return: v_vec modified with radial boost.
+    """
+    # max and min of radial trajectory.
+    r_max = np.max(r_vec)
+    r_min = np.min(r_vec)
+    # create a uniform grid of radial spacing.
+    r_grid = np.linspace(r_min, r_max, nr)
+    dr_vec = r_grid[1:] - r_grid[:-1]
+    dp_vec = p_vec[1:] - p_vec[:-1]
+
+    # deep copy the initial velocity vector before modifying.
+    v_mod = copy.deepcopy(v_vec)
+
+    for ii in range(len(dr_vec)):
+        for jj in range(len(dp_vec) + 1):
+            if r_vec[jj] < r_grid[ii]:
+                # modify and propagate towards the upwind direction.
+                if jj == len(dp_vec):  # force periodicity
+                    v_mod[-1] = v_mod[0]
+
+                else:
+                    # courant condition
+                    if (omega_rot * dr_vec[ii]) / (dp_vec[jj] * v_mod[jj]) > 1:
+                        print("CFL violated", dr_vec[ii] - dp_vec[jj] * v_mod[jj] / omega_rot)
+                        raise ValueError('CFL violated')
+
+                    frac1 = (v_mod[jj + 1] - v_mod[jj]) / v_mod[jj]
+                    frac2 = (omega_rot * dr_vec[ii]) / dp_vec[jj]
+                    v_mod[jj] = v_mod[jj] + frac1 * frac2
+    return v_mod
+
+
+def backwards_radial_boosting(r_vec, v_vec, p_vec, nr=30, omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """Radial boost if the destintination spacecraft radial trajectory is non uniform.
+    Requirements: r_vec is single-valued function of longitude.
+
+    :param omega_rot: differential rotation.
+    :param nr: radial grid number of points.
+    :param r_vec: spacecraft radial trajectory, type = 1d numpy array. units: km.
+    :param v_vec: velocity (vr), type = 1d numpy array. units: km/sec.
+    :param p_vec: spacecraft longitude trajectory, type = 1d numpy array. units: radians.
+    :return: v_vec modified with radial boost.
+    """
+    # max and min of radial trajectory.
+    r_max = np.max(r_vec)
+    r_min = np.min(r_vec)
+
+    # create a uniform grid of radial spacing.
+    r_grid = np.linspace(r_min, r_max, nr)
+    dr_vec = r_grid[1:] - r_grid[:-1]
+    dp_vec = p_vec[1:] - p_vec[:-1]
+
+    # deep copy the initial velocity vector before modifying.
+    v_mod = copy.deepcopy(v_vec)
+
+    for ii in range(len(dr_vec)):
+        for jj in range(len(dp_vec) + 1):
+            if r_vec[jj] < r_grid[ii]:
+                # modify and propagate towards the downwind direction.
+                if jj != len(dp_vec):
+                    # courant condition
+                    if (omega_rot * dr_vec[ii]) / (dp_vec[jj] * v_mod[jj]) > 1:
+                        print("CFL violated", dr_vec[ii] - dp_vec[jj] * v_mod[jj] / omega_rot)
+                        raise ValueError('CFL violated')
+                    frac2 = (omega_rot * dr_vec[ii]) / dp_vec[jj]
+                else:
+                    frac2 = (omega_rot * dr_vec[ii]) / dp_vec[0]
+
+                frac1 = (v_mod[jj - 1] - v_mod[jj]) / v_mod[jj]
+                v_mod[jj] = v_mod[jj] + frac1 * frac2
+
+    return v_mod
