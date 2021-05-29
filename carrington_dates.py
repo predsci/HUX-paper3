@@ -77,6 +77,26 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=2020, month=6, day=18)
         cr = "2231"
 
+    elif case_study == "cr2232":
+        # Carrington Rotation 2232 (Solo aligned with Earth)
+        # 2020 Jun 18 to 2020 Jul 15
+        starttime = dt.datetime(year=2020, month=6, day=18)
+        endtime = dt.datetime(year=2020, month=7, day=15)
+        cr = "2232"
+
+    elif case_study == "cr2233":
+        # Carrington Rotation 2233 (Solo available data)
+        # 2020 Jul 15 to 2020 Aug 11
+        starttime = dt.datetime(year=2020, month=7, day=15)
+        endtime = dt.datetime(year=2020, month=8, day=11)
+        cr = "2233"
+
+    elif case_study == "cr2234":
+        # Carrington Rotation 2234 (Solo available data)
+        # 2020 Aug 11 to 2020 Sep 07
+        starttime = dt.datetime(year=2020, month=8, day=11)
+        endtime = dt.datetime(year=2020, month=9, day=7)
+        cr = "2234"
 
     elif case_study == "cr2235":
         # todo: PSP VR DATA IS NOT AVAILABLE.
@@ -87,6 +107,13 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=2020, month=10, day=5)
         cr = "2235"
 
+    elif case_study == "cr2238":
+        # Carrington Rotation 2238
+        # 2020 Nov 28 to 2020 Dec 25
+        starttime = dt.datetime(year=2020, month=11, day=28)
+        endtime = dt.datetime(year=2020, month=12, day=25)
+        cr = "2238"
+
     elif case_study == "cr2239":
         # todo: PSP VR DATA IS NOT AVAILABLE.
         # Carrington Rotation 2239
@@ -95,4 +122,5 @@ def get_time_interval(case_study):
         starttime = dt.datetime(year=2020, month=12, day=25)
         endtime = dt.datetime(year=2021, month=1, day=22)
         cr = "2239"
+
     return starttime, endtime, cr
