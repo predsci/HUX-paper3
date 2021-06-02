@@ -108,6 +108,13 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=2020, month=10, day=5)
         cr = "2235"
 
+    elif case_study == "cr2236":
+        # Carrington Rotation 2236
+        # 2020 Oct 05 to 2020 Nov 01
+        starttime = dt.datetime(year=2020, month=10, day=5)
+        endtime = dt.datetime(year=2020, month=11, day=1)
+        cr = "2236"
+
     elif case_study == "cr2238":
         # Carrington Rotation 2238
         # 2020 Nov 28 to 2020 Dec 25
