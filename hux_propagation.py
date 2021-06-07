@@ -251,6 +251,88 @@ def apply_second_order_f_upwind(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha
     return v
 
 
+def apply_conservative_f_upwind(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
+                                omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """Apply 1d conservative upwind model to the inviscid burgers equation.
+    r/phi grid. return and save all radial velocity slices.
+
+    :param r_initial: 1d array, initial condition (vr0). units = (km/sec).
+    :param dr_vec: 1d array, mesh spacing in r. units = (km)
+    :param dp_vec: 1d array, mesh spacing in p. units = (radians)
+    :param alpha: float, hyper parameter for acceleration (default = 0.15).
+    :param rh: float, hyper parameter for acceleration (default r=50*695700). units: (km)
+    :param r0: float, initial radial location. units = (km).
+    :param add_v_acc: bool, True will add acceleration boost.
+    :param omega_rot: differential rotation.
+    :return: velocity matrix dimensions (nr x np)
+    """
+    v = np.zeros((len(dr_vec) + 1, len(dp_vec) + 1))  # initialize array vr.
+    v[0, :] = r_initial
+
+    if add_v_acc:
+        v_acc = alpha * (v[0, :] * (1 - np.exp(-r0 / rh)))
+        v[0, :] = v_acc + v[0, :]
+
+    for i in range(len(dr_vec)):
+        for j in range(len(dp_vec) + 1):
+
+            if j == len(dp_vec):  # force periodicity
+                v[i + 1, j] = v[i + 1, 0]
+
+            else:
+                if (omega_rot * dr_vec[i]) / (dp_vec[j] * v[i, j]) > 1:
+                    print(dr_vec[i] - dp_vec[j] * v[i, j] / omega_rot)
+                    print(i, j)  # courant condition
+
+                if j == len(dp_vec) - 1:
+                    frac1 = (v[i, -1] - v[i, j])
+                else:
+                    frac1 = (v[i, j + 1] - v[i, j])
+                frac2 = (2 * omega_rot * dr_vec[i]) / (dp_vec[j])
+                v[i + 1, j] = np.sqrt(v[i, j]**2 + frac1 * frac2)
+    return v
+
+
+def apply_conservative_lax_friedrichs(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
+                                omega_rot=(2 * np.pi) / (25.38 * 86400)):
+    """Apply 1d Lax Friedrichs method to the inviscid burgers equation.
+    r/phi grid. return and save all radial velocity slices.
+
+    :param r_initial: 1d array, initial condition (vr0). units = (km/sec).
+    :param dr_vec: 1d array, mesh spacing in r. units = (km)
+    :param dp_vec: 1d array, mesh spacing in p. units = (radians)
+    :param alpha: float, hyper parameter for acceleration (default = 0.15).
+    :param rh: float, hyper parameter for acceleration (default r=50*695700). units: (km)
+    :param r0: float, initial radial location. units = (km).
+    :param add_v_acc: bool, True will add acceleration boost.
+    :param omega_rot: differential rotation.
+    :return: velocity matrix dimensions (nr x np)
+    """
+    v = np.zeros((len(dr_vec) + 1, len(dp_vec) + 1))  # initialize array vr.
+    v[0, :] = r_initial
+
+    if add_v_acc:
+        v_acc = alpha * (v[0, :] * (1 - np.exp(-r0 / rh)))
+        v[0, :] = v_acc + v[0, :]
+
+    for i in range(len(dr_vec)):
+        for j in range(len(dp_vec) + 1):
+            if j == len(dp_vec):  # force periodicity
+                v[i + 1, j] = v[i + 1, 0]
+            else:
+                if (omega_rot * dr_vec[i]) / (dp_vec[j] * v[i, j]) > 1:
+                    print(dr_vec[i] - dp_vec[j] * v[i, j] / omega_rot)
+                    print(i, j)  # courant condition
+                elif i == 0:
+                    frac1 = (v[i, j + 1] - v[i, j]) / v[i, j]
+                    frac2 = (omega_rot * dr_vec[i]) / dp_vec[j]
+                    v[i + 1, j] = v[i, j] + frac1 * frac2
+                else:
+                    frac2 = (-2 * omega_rot * dr_vec[i]) / (dp_vec[j])
+                    frac1 = 2*(v[i, j + 1]) - v[i-1, j] - (1/frac2)*(v[i-1, j]**2)
+                    v[i + 1, j] = (frac2/2) *(1 - np.sqrt(1 - (4/frac2)*frac1))
+    return v
+
 def forward_radial_boosting(r_vec, v_vec, p_vec, nr=30, omega_rot=(2 * np.pi) / (25.38 * 86400)):
     """Radial boost if the initial condition r0 is non uniform.
     Requirements: r_vec is single-valued function of longitude.
