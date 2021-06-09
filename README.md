@@ -1,6 +1,6 @@
 # ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  Applications of the Heliospheric Upwind eXtrapolation (HUX) Technique to a variety of heliospheric in situ datasets
 
-Evaluating the Heliospheric Upwind eXtrapolation (HUX) Technique developed by Riley et al. [1] to map solar wind streams radially between different regions in the heliosphere.
+Evaluating the Heliospheric Upwind eXtrapolation (HUX) Technique developed by Riley et al. [1, 2] to map solar wind streams radially between different regions in the heliosphere.
 This study leverages observations from Parker Solar Probe (PSP), Solar Orbiter (SolO), and OMNI (Earth) spacecrafts to test the HUX technique with in situ data. 
 
 # References
