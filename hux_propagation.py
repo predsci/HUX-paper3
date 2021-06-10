@@ -463,8 +463,6 @@ def apply_limiter_upwind(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, 
                         f_upper = v[i, j] + (courant/2) * ((-3 * v[i, j] + 4 * v[i, j+1] - v[i, j+2]) / v[i, j])
                     theta = (v[i, j] - v[i, j - 1])/(v[i, j+1] - v[i, j])
                     phi = max(0, min(1, 2*theta), min(theta, 2))
-                    #print("phi = ", phi)
-                    #print("theta = ", theta)
                     v[i + 1, j] = f_lower + phi * (f_upper - f_lower)
     return v
 
