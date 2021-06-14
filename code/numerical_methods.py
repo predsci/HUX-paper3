@@ -127,12 +127,11 @@ def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15
 
                 elif numerical_method == "limiter_upwind_first_maccormack":
                     # first order upwind.
-                    courant = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
                     # first order upwind method (conservative)
-                    f_lower = v[i, j] + courant * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    f_lower = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
 
                     # second order upwind method (quasi-linear).
-                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
                     v_star_curr = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
                     v_star_prev = v[i, j - 1] + nu * (np.log(v[i, j]) - np.log(v[i, j - 1]))
                     f_upper = 0.5 * (v[i, j] + v_star_curr) + (nu / 2) * (np.log(v_star_curr) - np.log(v_star_prev))
@@ -141,5 +140,8 @@ def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15
 
                     # limiter function "superbee"
                     phi = max(0, min(1, 2 * theta), min(theta, 2))
+
+
                     v[i + 1, j] = f_lower + phi * (f_upper - f_lower)
+
     return v

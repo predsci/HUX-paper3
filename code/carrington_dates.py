@@ -4,7 +4,52 @@ import datetime as dt
 def get_time_interval(case_study):
     starttime, endtime, cr = None, None, None
     # set up - latitude minimum difference.
-    if case_study == "cr2209":
+    if case_study == "cr1647":
+        starttime = dt.datetime(year=1976, month=10, day=10)
+        endtime = dt.datetime(year=1976, month=11, day=7)
+        cr = "1647"
+
+    elif case_study == "cr1654":
+        starttime = dt.datetime(year=1977, month=4, day=20)
+        endtime = dt.datetime(year=1977, month=5, day=17)
+        cr = "1654"
+
+    elif case_study == "cr1655":
+        starttime = dt.datetime(year=1977, month=5, day=17)
+        endtime = dt.datetime(year=1977, month=6, day=13)
+        cr = "1655"
+
+    elif case_study == "cr1660":
+        starttime = dt.datetime(year=1977, month=9, day=30)
+        endtime = dt.datetime(year=1977, month=10, day=27)
+        cr = "1660"
+
+    elif case_study == "cr1661":
+        starttime = dt.datetime(year=1977, month=10, day=27)
+        endtime = dt.datetime(year=1977, month=11, day=24)
+        cr = "1661"
+
+    elif case_study == "cr1667":
+        starttime = dt.datetime(year=1978, month=4, day=9)
+        endtime = dt.datetime(year=1978, month=5, day=6)
+        cr = "1667"
+
+    elif case_study == "cr1675":
+        starttime = dt.datetime(year=1978, month=11, day=13)
+        endtime = dt.datetime(year=1978, month=12, day=10)
+        cr = "1675"
+
+    elif case_study == "cr1680":
+        starttime = dt.datetime(year=1979, month=3, day=30)
+        endtime = dt.datetime(year=1979, month=4, day=26)
+        cr = "1680"
+
+    elif case_study == "cr1688":
+        starttime = dt.datetime(year=1979, month=11, day=3)
+        endtime = dt.datetime(year=1979, month=11, day=30)
+        cr = "1688"
+
+    elif case_study == "cr2209":
         # Carrington Rotation 2209
         # Min lat 01 (2018-10-16)
         # 2018 Sep 29	2018 Oct 26

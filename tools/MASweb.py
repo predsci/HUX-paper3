@@ -3,7 +3,7 @@ from pathlib import Path
 from parfive import Downloader
 
 
-def get_mas_path(cr):
+def get_mas_path(cr, folder="hmi_mast_mas_std_0201"):
     """Get MAS website results.
 
     :param cr: carrington rotation. ex: 2210
@@ -14,7 +14,8 @@ def get_mas_path(cr):
     cr_string = 'mas_helio/cr' + str(cr)
     mas_helio_dir = download_dir / cr_string 
     mas_helio_dir.mkdir(parents=True, exist_ok=True)
-    base_url = 'http://www.predsci.com/data/runs/cr' + str(cr) + '-medium/hmi_mast_mas_std_0201/helio/{var}002.hdf'
+
+    base_url = 'http://www.predsci.com/data/runs/cr' + str(cr) + '-medium/' + folder + '/helio/{var}002.hdf'
 
     # Create a downloader to queue the files to be downloaded
     dl = Downloader()
