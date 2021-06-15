@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
                            omega_rot=(2 * np.pi) / (25.38 * 86400), numerical_method="second_order_upwind"):
     """Apply a numerical method to solve the solar wind problem.
@@ -64,11 +65,14 @@ def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15
 
                 elif numerical_method == "third_order_upwind_conservative":
                     if j == len(dp_vec) - 1:
-                        frac1 = (-np.log(v[i, -2]) + 6 * np.log(v[i, -1]) - 3 * np.log(v[i, j]) - 2 * np.log(v[i, j - 1]))
+                        frac1 = (-np.log(v[i, -2]) + 6 * np.log(v[i, -1]) - 3 * np.log(v[i, j]) - 2 * np.log(
+                            v[i, j - 1]))
                     elif j == len(dp_vec) - 2:
-                        frac1 = (-np.log(v[i, -1]) + 6 * np.log(v[i, j + 1]) - 3 * np.log(v[i, j]) - 2 * np.log(v[i, j - 1]))
+                        frac1 = (-np.log(v[i, -1]) + 6 * np.log(v[i, j + 1]) - 3 * np.log(v[i, j]) - 2 * np.log(
+                            v[i, j - 1]))
                     else:
-                        frac1 = (-np.log(v[i, j + 2]) + 6 * np.log(v[i, j + 1]) - 3 * np.log(v[i, j]) - 2 * np.log(v[i, j - 1]))
+                        frac1 = (-np.log(v[i, j + 2]) + 6 * np.log(v[i, j + 1]) - 3 * np.log(v[i, j]) - 2 * np.log(
+                            v[i, j - 1]))
                     frac2 = (omega_rot * dr_vec[i]) / (6 * dp_vec[j])
                     v[i + 1, j] = v[i, j] + frac1 * frac2
 
@@ -83,65 +87,116 @@ def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15
                     v_star_prev = v[i, j - 1] + nu * (np.log(v[i, j]) - np.log(v[i, j - 1]))
                     v[i + 1, j] = 0.5 * (v[i, j] + v_star_curr) + (nu / 2) * (np.log(v_star_curr) - np.log(v_star_prev))
 
+                elif numerical_method == "lax_wendroff":
+                    # coefficient
+                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                    # v(j + 1/2)
+                    v_star_curr = 0.5 * (v[i, j + 1] + v[i, j]) + (nu / 2) * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    # v(j - 1/2)
+                    v_star_prev = 0.5 * (v[i, j] + v[i, j - 1]) + (nu / 2) * (np.log(v[i, j]) - np.log(v[i, j - 1]))
+                    v[i + 1, j] = v[i, j] + nu * (np.log(v_star_curr) - np.log(v_star_prev))
+
                 elif numerical_method == "lax_friedrichs":
-                    frac = (omega_rot * dr_vec[i]) / (2 * dp_vec[j])
-                    v[i + 1, j] = 0.5 * (v[i, j - 1] + v[i, j + 1]) + frac * (np.log(v[i, j + 1]) - np.log(v[i, j - 1]))
-
-                elif numerical_method == "limiter_upwind_second_and_first":
-                    # first order upwind.
                     nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
-                    f_lower = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    v[i + 1, j] = 0.5 * (v[i, j - 1] + v[i, j + 1]) + \
+                                  (nu / 2) * (np.log(v[i, j + 1]) - np.log(v[i, j - 1]))
 
-                    # second order upwind.
-                    if j == len(dp_vec) - 1:
-                        f_upper = v[i, j] + (nu / 2) * ((4 * v[i, j + 1] - 3 * v[i, j] - v[i, -1]) / (v[i, j]))
-                    else:
-                        f_upper = v[i, j] + (nu / 2) * ((4 * v[i, j + 1] - 3 * v[i, j] - v[i, j + 2]) / (v[i, j]))
-
-                    # evaluate the smoothness.
-                    theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
-                    # limiter function "superbee"
-                    phi = max(0, min(1, 2 * theta), min(theta, 2))
-
-                    v[i + 1, j] = f_lower + phi * (f_upper - f_lower)
-
-                elif numerical_method == "limiter_upwind_third_and_first":
-                    # first order upwind.
-                    courant = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                elif numerical_method == "limiter_superbee_upwind_first_maccormack":
                     # first order upwind method (conservative)
-                    f_lower = v[i, j] + courant * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    f_lower_curr = -omega_rot * np.log(v[i, j + 1])
+                    f_lower_prev = -omega_rot * np.log(v[i, j])
 
-                    # second order upwind method (quasi-linear).
-                    if j == len(dp_vec) - 1:
-                        f_upper = v[i, j] + (courant / 6) * \
-                                  ((-3 * v[i, j] + 6 * v[i, j + 1] - v[i, -1] - 2 * v[i, j - 1]) / v[i, j])
-                    else:
-                        f_upper = v[i, j] + (courant / 6) * \
-                                  ((-3 * v[i, j] + 6 * v[i, j + 1] - v[i, j + 2] - 2 * v[i, j - 1]) / v[i, j])
-                    # evaluate the smoothness of the current wave.
-                    theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
-
-                    # limiter function "superbee"
-                    phi = max(0, min(1, 2 * theta), min(theta, 2))
-                    v[i + 1, j] = f_lower + phi * (f_upper - f_lower)
-
-                elif numerical_method == "limiter_upwind_first_maccormack":
-                    # first order upwind.
+                    # McCormack's method
                     nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
-                    # first order upwind method (conservative)
-                    f_lower = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
-
-                    # second order upwind method (quasi-linear).
                     v_star_curr = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
                     v_star_prev = v[i, j - 1] + nu * (np.log(v[i, j]) - np.log(v[i, j - 1]))
-                    f_upper = 0.5 * (v[i, j] + v_star_curr) + (nu / 2) * (np.log(v_star_curr) - np.log(v_star_prev))
+
+                    f_upper_curr = 0.5 * (f_lower_curr - omega_rot * np.log(v_star_curr))
+                    f_upper_prev = 0.5 * (f_lower_prev - omega_rot * np.log(v_star_prev))
+
                     # evaluate the smoothness of the current wave.
                     theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
 
                     # limiter function "superbee"
                     phi = max(0, min(1, 2 * theta), min(theta, 2))
 
+                    final_flux_curr = f_lower_curr + phi * (f_upper_curr - f_lower_curr)
+                    final_flux_prev = f_lower_prev + phi * (f_upper_prev - f_lower_prev)
 
-                    v[i + 1, j] = f_lower + phi * (f_upper - f_lower)
+                    v[i + 1, j] = v[i, j] - (dr_vec[i] / dp_vec[j]) * (final_flux_curr - final_flux_prev)
+
+                elif numerical_method == "limiter_van_leer_upwind_first_maccormack":
+                    # first order upwind method (conservative)
+                    f_lower_curr = -omega_rot * np.log(v[i, j + 1])
+                    f_lower_prev = -omega_rot * np.log(v[i, j])
+
+                    # McCormack's method
+                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                    v_star_curr = v[i, j] + nu * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    v_star_prev = v[i, j - 1] + nu * (np.log(v[i, j]) - np.log(v[i, j - 1]))
+
+                    f_upper_curr = 0.5 * (f_lower_curr - omega_rot * np.log(v_star_curr))
+                    f_upper_prev = 0.5 * (f_lower_prev - omega_rot * np.log(v_star_prev))
+
+                    # evaluate the smoothness of the current wave.
+                    theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
+
+                    # limiter function van leer.
+                    phi = (np.abs(theta) + theta)/(1 + theta)
+
+                    final_flux_curr = f_lower_curr + phi * (f_upper_curr - f_lower_curr)
+                    final_flux_prev = f_lower_prev + phi * (f_upper_prev - f_lower_prev)
+
+                    v[i + 1, j] = v[i, j] - (dr_vec[i] / dp_vec[j]) * (final_flux_curr - final_flux_prev)
+
+                elif numerical_method == "limiter_superbee_upwind_first_lax_wendroff":
+                    # first order upwind method (conservative)
+                    f_lower_curr = -omega_rot * np.log(v[i, j + 1])
+                    f_lower_prev = -omega_rot * np.log(v[i, j])
+
+                    # Lax-Wendroff method
+                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                    # v(j + 1/2)
+                    v_star_curr = 0.5 * (v[i, j + 1] + v[i, j]) + (nu / 2) * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    # v(j - 1/2)
+                    v_star_prev = 0.5 * (v[i, j] + v[i, j - 1]) + (nu / 2) * (np.log(v[i, j]) - np.log(v[i, j - 1]))
+                    f_upper_curr = -omega_rot * np.log(v_star_curr)
+                    f_upper_prev = -omega_rot * np.log(v_star_prev)
+
+                    # evaluate the smoothness of the current wave.
+                    theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
+
+                    # limiter function "superbee"
+                    phi = max(0, min(1, 2 * theta), min(theta, 2))
+
+                    final_flux_curr = f_lower_curr + phi * (f_upper_curr - f_lower_curr)
+                    final_flux_prev = f_lower_prev + phi * (f_upper_prev - f_lower_prev)
+
+                    v[i + 1, j] = v[i, j] - (dr_vec[i] / dp_vec[j]) * (final_flux_curr - final_flux_prev)
+
+                elif numerical_method == "limiter_van_leer_upwind_first_lax_wendroff":
+                    # first order upwind method (conservative)
+                    f_lower_curr = -omega_rot * np.log(v[i, j + 1])
+                    f_lower_prev = -omega_rot * np.log(v[i, j])
+
+                    # Lax-Wendroff method
+                    nu = (omega_rot * dr_vec[i]) / (dp_vec[j])
+                    # v(j + 1/2)
+                    v_star_curr = 0.5 * (v[i, j + 1] + v[i, j]) + (nu / 2) * (np.log(v[i, j + 1]) - np.log(v[i, j]))
+                    # v(j - 1/2)
+                    v_star_prev = 0.5 * (v[i, j] + v[i, j - 1]) + (nu / 2) * (np.log(v[i, j]) - np.log(v[i, j - 1]))
+                    f_upper_curr = -omega_rot * np.log(v_star_curr)
+                    f_upper_prev = -omega_rot * np.log(v_star_prev)
+
+                    # evaluate the smoothness of the current wave.
+                    theta = (v[i, j] - v[i, j - 1]) / (v[i, j + 1] - v[i, j])
+
+                    # limiter function van leer
+                    phi = (np.abs(theta) + theta)/(1 + theta)
+
+                    final_flux_curr = f_lower_curr + phi * (f_upper_curr - f_lower_curr)
+                    final_flux_prev = f_lower_prev + phi * (f_upper_prev - f_lower_prev)
+
+                    v[i + 1, j] = v[i, j] - (dr_vec[i] / dp_vec[j]) * (final_flux_curr - final_flux_prev)
 
     return v

@@ -57,6 +57,30 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=2018, month=10, day=26)
         cr = "2209"
 
+    elif case_study == "cr1852":
+        starttime = dt.datetime(year=1992, month=2, day=1)
+        endtime = dt.datetime(year=1992, month=2, day=28)
+        cr = "1852"
+
+    elif case_study == "cr1853":
+        starttime = dt.datetime(year=1992, month=2, day=28)
+        endtime = dt.datetime(year=1992, month=3, day=27)
+        cr = "1853"
+    elif case_study == "cr1865":
+        starttime = dt.datetime(year=1993, month=1, day=21)
+        endtime = dt.datetime(year=1993, month=2, day=17)
+        cr = "1865"
+
+    elif case_study == "cr2039":
+        starttime = dt.datetime(year=2006, month=1, day=18)
+        endtime = dt.datetime(year=2006, month=2, day=15)
+        cr = "2039"
+
+    elif case_study == "cr2060":
+        starttime = dt.datetime(year=2007, month=8, day=14)
+        endtime = dt.datetime(year=2007, month=9, day=10)
+        cr = "2060"
+
     elif case_study == "cr2210":
         # Carrington Rotation 2210
         # 2018 Oct 26	2018 Nov 23
