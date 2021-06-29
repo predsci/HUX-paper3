@@ -49,14 +49,6 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=1979, month=11, day=30)
         cr = "1688"
 
-    elif case_study == "cr2209":
-        # Carrington Rotation 2209
-        # Min lat 01 (2018-10-16)
-        # 2018 Sep 29	2018 Oct 26
-        starttime = dt.datetime(year=2018, month=9, day=29)
-        endtime = dt.datetime(year=2018, month=10, day=26)
-        cr = "2209"
-
     elif case_study == "cr1852":
         starttime = dt.datetime(year=1992, month=2, day=1)
         endtime = dt.datetime(year=1992, month=2, day=28)
@@ -71,6 +63,31 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=1993, month=2, day=17)
         cr = "1865"
 
+    elif case_study == "cr1934":
+        starttime = dt.datetime(year=1998, month=3, day=18)
+        endtime = dt.datetime(year=1998, month=4, day=14)
+        cr = "1934"
+
+    elif case_study == "cr1976":
+        starttime = dt.datetime(year=2001, month=5, day=6)
+        endtime = dt.datetime(year=2001, month=6, day=2)
+        cr = "1976"
+
+    elif case_study == "cr2008":
+        starttime = dt.datetime(year=2003, month=9, day=26)
+        endtime = dt.datetime(year=2003, month=10, day=23)
+        cr = "2008"
+
+    elif case_study == "cr2016":
+        starttime = dt.datetime(year=2004, month=5, day=1)
+        endtime = dt.datetime(year=2004, month=5, day=28)
+        cr = "2016"
+
+    elif case_study == "cr2026":
+        starttime = dt.datetime(year=2005, month=1, day=29)
+        endtime = dt.datetime(year=2005, month=2, day=25)
+        cr = "2026"
+
     elif case_study == "cr2039":
         starttime = dt.datetime(year=2006, month=1, day=18)
         endtime = dt.datetime(year=2006, month=2, day=15)
@@ -80,6 +97,14 @@ def get_time_interval(case_study):
         starttime = dt.datetime(year=2007, month=8, day=14)
         endtime = dt.datetime(year=2007, month=9, day=10)
         cr = "2060"
+
+    elif case_study == "cr2209":
+        # Carrington Rotation 2209
+        # Min lat 01 (2018-10-16)
+        # 2018 Sep 29	2018 Oct 26
+        starttime = dt.datetime(year=2018, month=9, day=29)
+        endtime = dt.datetime(year=2018, month=10, day=26)
+        cr = "2209"
 
     elif case_study == "cr2210":
         # Carrington Rotation 2210
