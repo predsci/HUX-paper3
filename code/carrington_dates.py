@@ -4,10 +4,25 @@ import datetime as dt
 def get_time_interval(case_study):
     starttime, endtime, cr = None, None, None
     # set up - latitude minimum difference.
-    if case_study == "cr1647":
+    if case_study == "cr1634":
+        starttime = dt.datetime(year=1975, month=10, day=22)
+        endtime = dt.datetime(year=1975, month=11, day=18)
+        cr = "1634"
+
+    elif case_study == "cr1639":
+        starttime = dt.datetime(year=1976, month=3, day=6)
+        endtime = dt.datetime(year=1976, month=4, day=3)
+        cr = "1639"
+
+    elif case_study == "cr1647":
         starttime = dt.datetime(year=1976, month=10, day=10)
         endtime = dt.datetime(year=1976, month=11, day=7)
         cr = "1647"
+
+    elif case_study == "cr1653":
+        starttime = dt.datetime(year=1977, month=3, day=23)
+        endtime = dt.datetime(year=1977, month=4, day=20)
+        cr = "1653"
 
     elif case_study == "cr1654":
         starttime = dt.datetime(year=1977, month=4, day=20)
@@ -58,15 +73,36 @@ def get_time_interval(case_study):
         starttime = dt.datetime(year=1992, month=2, day=28)
         endtime = dt.datetime(year=1992, month=3, day=27)
         cr = "1853"
+
     elif case_study == "cr1865":
         starttime = dt.datetime(year=1993, month=1, day=21)
         endtime = dt.datetime(year=1993, month=2, day=17)
         cr = "1865"
 
+    elif case_study == "cr1915":
+        starttime = dt.datetime(year=1996, month=10, day=15)
+        endtime = dt.datetime(year=1996, month=11, day=11)
+        cr = "1915"
+
+    elif case_study == "cr1925":
+        starttime = dt.datetime(year=1997, month=7, day=15)
+        endtime = dt.datetime(year=1997, month=8, day=11)
+        cr = "1925"
+
+    elif case_study == "cr1930":
+        starttime = dt.datetime(year=1997, month=11, day=28)
+        endtime = dt.datetime(year=1997, month=12, day=26)
+        cr = "1930"
+
     elif case_study == "cr1934":
         starttime = dt.datetime(year=1998, month=3, day=18)
         endtime = dt.datetime(year=1998, month=4, day=14)
         cr = "1934"
+
+    elif case_study == "cr1946":
+        starttime = dt.datetime(year=1999, month=2, day=8)
+        endtime = dt.datetime(year=1999, month=3, day=7)
+        cr = "1946"
 
     elif case_study == "cr1976":
         starttime = dt.datetime(year=2001, month=5, day=6)
