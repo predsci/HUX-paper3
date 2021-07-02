@@ -160,9 +160,9 @@ def limiter_function(theta, limiter="minmod"):
     if limiter == "vanleer":
         return (np.abs(theta) + theta) / (1 + np.abs(theta))
     elif limiter == "minmod":
-        return np.max(0, min(1, theta))
+        return max(0., min(1., theta))
     elif limiter == "superbee":
-        return np.max(0, np.min(1, 2*theta), min(theta, 2))
+        return max(0., min(1., 2*theta), min(theta, 2))
     elif limiter == "mc":
-        return np.max(0, min((1 + theta)/2, 2, 2*theta))
+        return max(0., min((1 + theta)/2, 2, 2*theta))
 
