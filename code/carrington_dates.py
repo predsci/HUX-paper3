@@ -14,6 +14,11 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=1976, month=4, day=3)
         cr = "1639"
 
+    elif case_study == "cr1642":
+        starttime = dt.datetime(year=1976, month=5, day=27)
+        endtime = dt.datetime(year=1976, month=6, day=23)
+        cr = "1642"
+
     elif case_study == "cr1647":
         starttime = dt.datetime(year=1976, month=10, day=10)
         endtime = dt.datetime(year=1976, month=11, day=7)
