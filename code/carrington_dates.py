@@ -199,6 +199,11 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=2006, month=2, day=15)
         cr = "2039"
 
+    elif case_study == "cr2059":
+        starttime = dt.datetime(year=2007, month=7, day=18)
+        endtime = dt.datetime(year=2007, month=8, day=14)
+        cr = "2059"
+
     elif case_study == "cr2060":
         starttime = dt.datetime(year=2007, month=8, day=14)
         endtime = dt.datetime(year=2007, month=9, day=10)
