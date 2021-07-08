@@ -109,6 +109,21 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=1983, month=7, day=1)
         cr = "1736"
 
+    elif case_study == "cr1835":
+        starttime = dt.datetime(year=1990, month=10, day=25)
+        endtime = dt.datetime(year=1990, month=11, day=21)
+        cr = "1835"
+
+    elif case_study == "cr1836":
+        starttime = dt.datetime(year=1990, month=11, day=21)
+        endtime = dt.datetime(year=1990, month=12, day=19)
+        cr = "1836"
+
+    elif case_study == "cr1841":
+        starttime = dt.datetime(year=1991, month=4, day=7)
+        endtime = dt.datetime(year=1991, month=5, day=4)
+        cr = "1841"
+
     elif case_study == "cr1852":
         starttime = dt.datetime(year=1992, month=2, day=1)
         endtime = dt.datetime(year=1992, month=2, day=28)
@@ -139,10 +154,20 @@ def get_time_interval(case_study):
         endtime = dt.datetime(year=1997, month=12, day=26)
         cr = "1930"
 
+    elif case_study == "cr1933":
+        starttime = dt.datetime(year=1998, month=2, day=18)
+        endtime = dt.datetime(year=1998, month=3, day=18)
+        cr = "1933"
+
     elif case_study == "cr1934":
         starttime = dt.datetime(year=1998, month=3, day=18)
         endtime = dt.datetime(year=1998, month=4, day=14)
         cr = "1934"
+
+    elif case_study == "cr1936":
+        starttime = dt.datetime(year=1998, month=5, day=11)
+        endtime = dt.datetime(year=1998, month=6, day=7)
+        cr = "1936"
 
     elif case_study == "cr1946":
         starttime = dt.datetime(year=1999, month=2, day=8)
