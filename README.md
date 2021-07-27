@@ -28,6 +28,11 @@ can be downloaded using [PsiPy](https://psipy.readthedocs.io/en/stable/auto_exam
 
 - Opal Issan, oissan@predsci.com
 
+
+**Correspondence**:
+
+Pete Riley, Predictive Science, Inc., San Diego, California, USA. pete@predsci.com
+
 # License
 MIT
 
