@@ -4,7 +4,7 @@ import numpy as np
 
 
 def apply_numerical_method(r_initial, dr_vec, dp_vec, r0=30 * 695700, alpha=0.15, rh=50 * 695700, add_v_acc=True,
-                           omega_rot=(2 * np.pi) / (25.38 * 86400), numerical_method="second_order_upwind",
+                           omega_rot=(2 * np.pi) / (25.38 * 86400), numerical_method="upwind_first_maccormack",
                            flux_function="vanleer"):
     """Apply a numerical method to solve the solar wind problem.
     r/phi grid. return and save all radial velocity slices.
