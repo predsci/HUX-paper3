@@ -1,7 +1,7 @@
-# ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  Applications of the Heliospheric Upwind eXtrapolation (HUX) Technique to a variety of heliospheric in situ datasets
+# ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  Theoretical Refinements to the HeliosphericUpwind eXtrapolation Technique andApplication to in-situ Measurements
 
 Evaluating the Heliospheric Upwind eXtrapolation (HUX) Technique developed by Riley et al. [1, 2] to map solar wind streams radially between different regions in the heliosphere.
-This study leverages observations from Helios (A and B) and Earth based spacecrafts (OMNI/ACE/WIND) to test the HUX technique with in situ data. Moreover, in an attempt to enhance the standard HUX method, we propose flux-limiter numerical schemes that accurately capture compression and rarefaction waves.
+This study leverages observations from Helios (A and B) and Earth based spacecrafts (OMNI) to test the HUX technique with in situ data. Moreover, in an attempt to enhance the standard HUX method, we propose flux-limiter numerical schemes that accurately capture compression and rarefaction waves.
 
 # References
 [1] [Riley, P. and Lionello, Roberto. Mapping solar wind streams from the Sun to 1 AU: A comparison of techniques. Solar Physics, 270(2), 575–592, 2011.](https://www.researchgate.net/publication/226565167_Mapping_Solar_Wind_Streams_from_the_Sun_to_1_AU_A_Comparison_of_Techniques)
