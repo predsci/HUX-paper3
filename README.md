@@ -1,4 +1,4 @@
-# ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  Theoretical Refinements to the HeliosphericUpwind eXtrapolation Technique and Application to in-situ Measurements
+# ![Icon](figures/rsz_psi_logo.png)<!-- .element height="10%" width="10%" -->  Theoretical Refinements to the Heliospheric Upwind eXtrapolation Technique and Application to in-situ Measurements
 
 Evaluating the Heliospheric Upwind eXtrapolation (HUX) Technique developed by Riley et al. [1, 2] to map solar wind streams radially between different regions in the heliosphere. This study leverages observations from Helios (A and B) and Earth based spacecrafts (OMNI) to test the HUX technique with in situ data. Moreover, in an attempt to enhance the standard HUX method, we propose flux-limiter numerical schemes that accurately capture compression and rarefaction waves.
 
